@@ -39,8 +39,11 @@ $markdown += New-MDHeader "Language and Runtime" -Level 3
 
 $runtimesList = @(
     (Get-BashVersion),
+    (Get-DashVersion),
     (Get-CPPVersions),
     (Get-FortranVersions),
+    (Get-MsbuildVersion),
+    (Get-MonoVersion),
     (Get-NodeVersion),
     (Get-PerlVersion),
     (Get-PythonVersion),
@@ -48,14 +51,13 @@ $runtimesList = @(
     (Get-RubyVersion),
     (Get-JuliaVersion),
     (Get-ClangVersions),
-    (Get-ClangFormatVersions)
+    (Get-ClangFormatVersions),
+    (Get-ClangTidyVersions),
+    (Get-KotlinVersion)
 )
 
 if ((Test-IsUbuntu18) -or (Test-IsUbuntu20)) {
     $runtimesList += @(
-        (Get-MsbuildVersion),
-        (Get-KotlinVersion),
-        (Get-MonoVersion),
         (Get-ErlangVersion),
         (Get-ErlangRebar3Version),
         (Get-SwiftVersion)
@@ -71,6 +73,7 @@ $packageManagementList = @(
     (Get-CpanVersion),
     (Get-GemVersion),
     (Get-MinicondaVersion),
+    (Get-NuGetVersion),
     (Get-HelmVersion),
     (Get-NpmVersion),
     (Get-YarnVersion),
@@ -118,11 +121,16 @@ $toolsList = @(
     (Get-DockerComposeV1Version),
     (Get-DockerComposeV2Version),
     (Get-DockerBuildxVersion),
+    (Get-DockerAmazonECRCredHelperVersion),
+    (Get-BuildahVersion),
+    (Get-PodManVersion),
+    (Get-SkopeoVersion),
     (Get-GitVersion),
     (Get-GitLFSVersion),
     (Get-GitFTPVersion),
     (Get-HavegedVersion),
     (Get-HerokuVersion),
+    (Get-LeiningenVersion),
     (Get-SVNVersion),
     (Get-JqVersion),
     (Get-YqVersion),
@@ -148,12 +156,8 @@ $toolsList = @(
 
 if ((Test-IsUbuntu18) -or (Test-IsUbuntu20)) {
     $toolsList += @(
-        (Get-BuildahVersion),
         (Get-PhantomJSVersion),
-        (Get-LeiningenVersion),
-        (Get-HHVMVersion),
-        (Get-PodManVersion),
-        (Get-SkopeoVersion)
+        (Get-HHVMVersion)
     )
 }
 
@@ -181,11 +185,9 @@ $markdown += New-MDList -Style Unordered -Lines (@(
     ) | Sort-Object
 )
 
-if ((Test-IsUbuntu18) -or (Test-IsUbuntu20)) {
-    $markdown += New-MDHeader "Java" -Level 3
-    $markdown += Get-JavaVersions | New-MDTable
-    $markdown += New-MDNewLine
-}
+$markdown += New-MDHeader "Java" -Level 3
+$markdown += Get-JavaVersions | New-MDTable
+$markdown += New-MDNewLine
 
 if ((Test-IsUbuntu20) -or (Test-IsUbuntu22)) {
     $markdown += New-MDHeader "GraalVM" -Level 3
@@ -229,14 +231,16 @@ $markdown += New-MDHeader "Browsers and Drivers" -Level 3
 $browsersAndDriversList = @(
     (Get-ChromeVersion),
     (Get-ChromeDriverVersion),
-    (Get-ChromiumVersion)
+    (Get-ChromiumVersion),
+    (Get-EdgeVersion),
+    (Get-EdgeDriverVersion),
+    (Get-SeleniumVersion)
 )
 
 if ((Test-IsUbuntu18) -or (Test-IsUbuntu20)) {
     $browsersAndDriversList += @(
         (Get-FirefoxVersion),
-        (Get-GeckodriverVersion),
-        (Get-SeleniumVersion)
+        (Get-GeckodriverVersion)
     )
 }
 
@@ -293,14 +297,12 @@ $markdown += New-MDList -Style Unordered -Lines @(
 
 $markdown += Build-WebServersSection
 
-if ((Test-IsUbuntu18) -or (Test-IsUbuntu20)) {
-    $markdown += New-MDHeader "Android" -Level 3
-    $markdown += Build-AndroidTable | New-MDTable
-    $markdown += New-MDNewLine
-    $markdown += New-MDHeader "Environment variables" -Level 4
-    $markdown += Build-AndroidEnvironmentTable | New-MDTable
-    $markdown += New-MDNewLine
-}
+$markdown += New-MDHeader "Android" -Level 3
+$markdown += Build-AndroidTable | New-MDTable
+$markdown += New-MDNewLine
+$markdown += New-MDHeader "Environment variables" -Level 4
+$markdown += Build-AndroidEnvironmentTable | New-MDTable
+$markdown += New-MDNewLine
 
 $markdown += New-MDHeader "Cached Docker images" -Level 3
 $markdown += Get-CachedDockerImagesTableData | New-MDTable
